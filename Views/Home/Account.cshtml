@@ -1,0 +1,45 @@
+@model AccountViewModel
+@{
+    ViewData["Title"] = "Account";
+}
+
+
+<div class="text-left">
+    <header>
+
+        <h1 class="display-4">Welcome @Model.User.FirstName</h1>
+        <a asp-controller="Home" asp-action="Logout">Logout</a>
+    </header>
+    <h4>Current Balance: $@Model.User.Balance</h4>
+
+    <div class="row">
+        <div class="col-6">
+            @await Html.PartialAsync("_DepositForm", @Model.Transaction)
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+
+        @if (@Model.User.Transactions.Count == 0)
+        {
+            <tr>
+                <td colspan="2">No transactions yet</td>
+            </tr>
+
+        }
+        else
+        {
+            @foreach (var transaction in @Model.User.Transactions)
+            {
+                <tr>
+                    <td>$@transaction.Amount</td>
+                    <td>@DateOnly.FromDateTime(transaction.CreatedAt)</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
